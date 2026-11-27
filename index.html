@@ -85,6 +85,9 @@ body{
 .result.show{display:block;animation:rise .35s ease both}
 .result h3{font-size:13px;color:#ffb7e7;margin-bottom:7px}
 .result p{font-size:12px;color:#cbbad1;line-height:1.6}
+.key-value{font-size:27px;font-weight:900;letter-spacing:3px;color:#fff;margin:12px 0;text-align:center;text-shadow:0 0 16px #ff69c9}
+.copy-key{display:block;margin:0 auto 13px;padding:10px 22px;border:0;border-radius:9px;background:#ff83d4;color:#240b22;font-size:11px;font-weight:900;letter-spacing:1px;cursor:pointer}
+.result .download{margin-top:15px}
 @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 .footer{font-size:10px;color:#776881;margin-top:20px;letter-spacing:1px}
 .overlay{
@@ -108,7 +111,8 @@ body{
 .task-copy b{display:block;font-size:12px}
 .task-copy small{display:block;color:#9e8ca8;font-size:10px;margin-top:4px}
 .task a{color:#ff9bdd;text-decoration:none;font-size:10px;font-weight:800;white-space:nowrap}
-.task input{accent-color:#ff68c8;width:17px;height:17px;cursor:pointer}
+.task-state{color:#ff6464;font-size:15px;filter:drop-shadow(0 0 5px currentColor)}
+.task-state.done{color:#4be39a;filter:drop-shadow(0 0 7px #4be39a)}
 .modal-actions{display:flex;gap:10px;margin-top:18px}
 .modal-actions button{flex:1;min-height:45px;border-radius:12px;font-weight:800;cursor:pointer}
 .cancel{border:1px solid #ffffff25;background:transparent;color:#cbbad1}
@@ -138,12 +142,13 @@ body{
       <div class="range-labels"><span>3 DAYS</span><span>7 DAYS</span><span>15 DAYS</span><span>30 DAYS</span></div>
     </div>
     <button class="primary" id="generateBtn">✦ &nbsp; CONTINUE</button>
-    <a class="download disabled" id="downloadBtn" href="#" aria-disabled="true">⇩ &nbsp; APK LINK COMING SOON</a>
-    <p class="note">Download link will be activated after the official APK URL is added.</p>
-
     <div class="result" id="resultBox" role="status" aria-live="polite">
-      <h3>REQUEST READY</h3>
-      <p id="resultText">Your selected plan is ready for server-side verification. No access key has been issued yet.</p>
+      <h3>✓ KEY GENERATED</h3>
+      <div class="key-value" id="keyValue">----------</div>
+      <button class="copy-key" id="copyKeyBtn" type="button">COPY KEY</button>
+      <p id="resultText">Selected plan: 7 DAYS</p>
+      <a class="download disabled" id="downloadBtn" href="#" aria-disabled="true">⇩ &nbsp; APK LINK COMING SOON</a>
+      <p class="note">APK download link will be added here.</p>
     </div>
   </section>
   <p class="footer">SECURE FLOW · RESPONSIVE DESIGN · BUILT FOR DRIP CLIENT</p>
@@ -158,19 +163,19 @@ body{
       <div class="task-icon">▶</div>
       <div class="task-copy"><b>YouTube Channel</b><small>Visit the channel</small></div>
       <a href="https://youtu.be/xbDTQqK13TQ?si=WtAFwqsF2gDwBSY6" target="_blank" rel="noopener noreferrer">OPEN ↗</a>
-      <input type="checkbox" class="task-check" aria-label="Mark YouTube task complete">
+      <span class="task-state" id="state-yt" aria-label="Pending">●</span>
     </div>
     <div class="task">
       <div class="task-icon">✈</div>
       <div class="task-copy"><b>Telegram Channel</b><small>Join the community</small></div>
       <a href="https://t.me/GwPathshala" target="_blank" rel="noopener noreferrer">OPEN ↗</a>
-      <input type="checkbox" class="task-check" aria-label="Mark Telegram task complete">
+      <span class="task-state" id="state-tg" aria-label="Pending">●</span>
     </div>
     <div class="task">
       <div class="task-icon">◉</div>
       <div class="task-copy"><b>Watch & Share Video</b><small>Open the featured video</small></div>
-      <a href="https://youtu.be/NnCV9VJoe_s?si=O3fQmOwvFgPncBoR" target="_blank" rel="noopener noreferrer">OPEN ↗</a>
-      <input type="checkbox" class="task-check" aria-label="Mark video task complete">
+      <a href="https://youtu.be/iSDU6zCZUvc?si=UDxOJIt4EWzYDTcg" target="_blank" rel="noopener noreferrer">OPEN ↗</a>
+      <span class="task-state" id="state-video" aria-label="Pending">●</span>
     </div>
     <div class="modal-actions">
       <button class="cancel" id="cancelBtn">CANCEL</button>
@@ -182,35 +187,78 @@ body{
 
 <script>
 const planNames={1:"3 DAYS",2:"7 DAYS",3:"15 DAYS",4:"30 DAYS"};
+const keysPool=[
+ "1137324396","2489510374","5931048267","8104729563","3571920486",
+ "7204918356","1948263750","6305814972","4729105836","8593021476",
+ "3104859267","9264817350","5481923076","2074819365","6830154927",
+ "1493027586","7392048156","5820491367","4910382756","8204917364"
+];
 const slider=document.getElementById("planSlider");
 const daysDisplay=document.getElementById("daysDisplay");
 const popup=document.getElementById("taskPopup");
-const checks=[...document.querySelectorAll(".task-check")];
 const continueBtn=document.getElementById("continueBtn");
 const modalStatus=document.getElementById("modalStatus");
 const resultBox=document.getElementById("resultBox");
 const resultText=document.getElementById("resultText");
+const taskDone={yt:false,tg:false,video:false};
 
 slider.addEventListener("input",()=>{daysDisplay.textContent=planNames[slider.value]});
+
 document.getElementById("generateBtn").addEventListener("click",()=>{
-  checks.forEach(c=>c.checked=false);updateTasks();
-  resultBox.classList.remove("show");popup.classList.add("open");
+  Object.keys(taskDone).forEach(k=>{
+    taskDone[k]=false;
+    const dot=document.getElementById("state-"+k);
+    dot.classList.remove("done");
+    dot.setAttribute("aria-label","Pending");
+  });
+  updateTasks();
+  resultBox.classList.remove("show");
+  popup.classList.add("open");
 });
+
 document.getElementById("cancelBtn").addEventListener("click",()=>popup.classList.remove("open"));
 popup.addEventListener("click",e=>{if(e.target===popup)popup.classList.remove("open")});
-checks.forEach(c=>c.addEventListener("change",updateTasks));
+
+document.querySelectorAll(".task a").forEach((link,index)=>{
+  const taskKey=["yt","tg","video"][index];
+  link.addEventListener("click",()=>{
+    // This reproduces the original demo behavior; opening a URL cannot
+    // independently prove a real subscription or completed view.
+    setTimeout(()=>{
+      taskDone[taskKey]=true;
+      const dot=document.getElementById("state-"+taskKey);
+      dot.classList.add("done");
+      dot.setAttribute("aria-label","Marked complete");
+      updateTasks();
+    },1200);
+  });
+});
+
 function updateTasks(){
-  const done=checks.filter(c=>c.checked).length;
-  modalStatus.textContent=`${done} / 3 tasks checked`;
+  const done=Object.values(taskDone).filter(Boolean).length;
+  modalStatus.textContent=`${done} / 3 tasks completed`;
   continueBtn.disabled=done!==3;
 }
 continueBtn.addEventListener("click",()=>{
+  if(!Object.values(taskDone).every(Boolean))return;
   popup.classList.remove("open");
-  resultText.textContent=`Selected plan: ${planNames[slider.value]}. Tasks have been marked complete. Connect a trusted server-side verification endpoint to validate tasks and issue a real access key.`;
+  const key=keysPool[Math.floor(Math.random()*keysPool.length)];
+  document.getElementById("keyValue").textContent=key;
+  resultText.textContent=`PLAN STATUS: ${planNames[slider.value]} · DEMO KEY GENERATED`;
   resultBox.classList.add("show");
 });
+document.getElementById("copyKeyBtn").addEventListener("click",async()=>{
+  const key=document.getElementById("keyValue").textContent;
+  try{
+    await navigator.clipboard.writeText(key);
+    document.getElementById("copyKeyBtn").textContent="COPIED ✓";
+  }catch{
+    document.getElementById("copyKeyBtn").textContent="SELECT AND COPY KEY";
+  }
+});
 
-// Add the official APK URL here when it is ready.
+// Add the official APK URL here once it is supplied.
+// The download button is shown only after all three tasks are marked complete.
 const APK_DOWNLOAD_URL="";
 const downloadBtn=document.getElementById("downloadBtn");
 if(APK_DOWNLOAD_URL.trim()){
