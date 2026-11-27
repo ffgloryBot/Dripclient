@@ -125,6 +125,15 @@ body{
 .wait-panel{display:none;text-align:center;margin-top:20px;padding:20px 14px;border:1px solid #d99abd55;border-radius:17px;background:#d99abd0c}
 .wait-panel.show{display:block;animation:rise .3s ease both}
 .wait-ring{width:58px;height:58px;margin:0 auto 12px;border-radius:50%;display:grid;place-items:center;border:3px solid #ffffff1c;border-top-color:#d99abd;border-right-color:#9276bd;animation:spin 1s linear infinite}
+.plan-confirm{display:none;margin-top:20px;padding:18px;border:1px solid #d99abd55;border-radius:17px;background:linear-gradient(130deg,#d99abd12,#9276bd12)}
+.plan-confirm.show{display:block;animation:rise .35s ease both}
+.plan-confirm-label{font-size:10px;letter-spacing:2px;color:#bca9c1;font-weight:800}
+.plan-confirm-days{font-size:27px;font-weight:1000;margin:7px 0 15px;color:#f2d8e9;text-shadow:0 0 16px #bd78a855}
+.generate-key-btn{background:linear-gradient(100deg,#9671ad,#c07eaa,#8c78b8)!important;background-size:200% auto!important;animation:buttonGlow 2s ease-in-out infinite,shine 4s linear infinite}
+.download{position:relative;overflow:hidden;background:linear-gradient(110deg,#244d45,#287a65 45%,#4c9b78)!important;border:1px solid #8be0b8!important;color:#f2fff8!important;box-shadow:0 0 22px #50c99445,inset 0 1px #ffffff55!important;animation:downloadPulse 2.4s ease-in-out infinite}
+.download:after{content:"";position:absolute;top:-40%;left:-70%;width:35%;height:180%;transform:rotate(25deg);background:#ffffff38;animation:downloadSweep 3.2s ease-in-out infinite}
+@keyframes downloadPulse{0%,100%{box-shadow:0 0 14px #50c99430}50%{box-shadow:0 0 30px #50c99480,0 0 45px #50c99430}}
+@keyframes downloadSweep{0%,35%{left:-70%}75%,100%{left:140%}}
 @keyframes spin{to{transform:rotate(360deg)}}
 .wait-title{font-size:13px;font-weight:900;letter-spacing:1px;color:#edc5dc}
 .wait-count{font-size:25px;font-weight:900;margin-top:7px;color:#fff;font-variant-numeric:tabular-nums}
@@ -145,12 +154,17 @@ body{
 
   <section class="card">
     <div class="card-head"><span class="key-icon">✧</span> GENERATE ACCESS <span class="key-icon">✧</span></div>
-    <p class="hint">Choose your plan · <strong id="daysDisplay">7 DAYS</strong></p>
+    <p class="hint">Choose your plan · <strong id="daysDisplay">0 DAYS</strong></p>
     <div class="range-wrap">
-      <input class="range" id="planSlider" type="range" min="1" max="4" value="2" step="1" aria-label="Select plan duration">
-      <div class="range-labels"><span>3 DAYS</span><span>7 DAYS</span><span>15 DAYS</span><span>30 DAYS</span></div>
+      <input class="range" id="planSlider" type="range" min="0" max="30" value="0" step="1" aria-label="Select plan duration">
+      <div class="range-labels"><span>0</span><span>3 DAYS</span><span>7 DAYS</span><span>15 DAYS</span><span>30 DAYS</span></div>
     </div>
-    <button class="primary" id="generateBtn">✦ &nbsp; CONTINUE</button>
+    <button class="primary" id="generateBtn" disabled>CONTINUE &nbsp; →</button>
+    <div class="plan-confirm" id="planConfirm">
+      <div class="plan-confirm-label">YOUR SELECTED PLAN</div>
+      <div class="plan-confirm-days" id="selectedPlanText">0 DAYS</div>
+      <button class="primary generate-key-btn" id="startKeyBtn">✧ &nbsp; GENERATE KEY</button>
+    </div>
     <div class="wait-panel" id="waitPanel" aria-live="polite">
     <div class="wait-ring"></div>
     <div class="wait-title">GENERATING YOUR KEY</div>
@@ -211,6 +225,9 @@ const keysPool=[
 ];
 const slider=document.getElementById("planSlider");
 const daysDisplay=document.getElementById("daysDisplay");
+const planConfirm=document.getElementById("planConfirm");
+const selectedPlanText=document.getElementById("selectedPlanText");
+const startKeyBtn=document.getElementById("startKeyBtn");
 const popup=document.getElementById("taskPopup");
 const continueBtn=document.getElementById("continueBtn");
 const modalStatus=document.getElementById("modalStatus");
@@ -219,7 +236,13 @@ const resultText=document.getElementById("resultText");
 const taskDone={yt:false,tg:false,video:false};
 let countdownTimer=null;
 
-slider.addEventListener("input",()=>{daysDisplay.textContent=planNames[slider.value]});
+function selectedDays(){return Number(slider.value)}
+function planLabel(){return `${selectedDays()} ${selectedDays()===1?"DAY":"DAYS"}`}
+slider.addEventListener("input",()=>{
+  daysDisplay.textContent=planLabel();
+  document.getElementById("generateBtn").disabled=selectedDays()===0;
+  planConfirm.classList.remove("show");
+});
 
 document.getElementById("generateBtn").addEventListener("click",()=>{
   Object.keys(taskDone).forEach(k=>{
@@ -231,6 +254,8 @@ document.getElementById("generateBtn").addEventListener("click",()=>{
   clearInterval(countdownTimer);
   updateTasks();
   resultBox.classList.remove("show");
+  document.getElementById("waitPanel").classList.remove("show");
+  planConfirm.classList.remove("show");
   popup.classList.add("open");
 });
 
@@ -259,33 +284,46 @@ function updateTasks(){
 continueBtn.addEventListener("click",()=>{
   if(!Object.values(taskDone).every(Boolean))return;
   popup.classList.remove("open");
-  beginKeyWait();
+  selectedPlanText.textContent=planLabel();
+  planConfirm.classList.add("show");
+  planConfirm.scrollIntoView({behavior:"smooth",block:"center"});
 });
 
+startKeyBtn.addEventListener("click",beginKeyWait);
 function beginKeyWait(){
   let remaining=20;
   const wait=document.getElementById("waitPanel");
   const count=document.getElementById("waitCount");
   const waitText=document.getElementById("waitText");
+  const stages=[
+    "Initializing key generator…","Preparing secure request…",
+    "Checking selected plan…","Loading access sequence…",
+    "Creating your key pattern…","Finalizing access details…"
+  ];
   wait.classList.add("show");
+  planConfirm.classList.remove("show");
   resultBox.classList.remove("show");
-  waitText.textContent="Preparing your selected plan";
   count.textContent=remaining;
-  const tick=()=>{
+  waitText.textContent=stages[Math.floor(Math.random()*stages.length)];
+  let stageIndex=0;
+  countdownTimer=setInterval(()=>{
     remaining--;
     count.textContent=remaining;
+    if(remaining%3===0 || remaining===17){
+      stageIndex=(stageIndex+1)%stages.length;
+      waitText.textContent=stages[stageIndex];
+    }
     if(remaining<=0){
       clearInterval(countdownTimer);
       wait.classList.remove("show");
       revealKey();
     }
-  };
-  countdownTimer=setInterval(tick,1000);
+  },1000);
 }
 function revealKey(){
   const key=keysPool[Math.floor(Math.random()*keysPool.length)];
   document.getElementById("keyValue").textContent=key;
-  resultText.textContent=`PLAN SELECTED: ${planNames[slider.value]} · ACCESS KEY READY`;
+  resultText.textContent=`PLAN SELECTED: ${planLabel()} · ACCESS KEY READY`;
   resultBox.classList.add("show");
   resultBox.scrollIntoView({behavior:"smooth",block:"center"});
 }
