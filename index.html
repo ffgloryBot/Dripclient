@@ -7,30 +7,30 @@
 <title>DRIP CLIENT — GW PATHSHALA</title>
 <style>
 :root{
-  --bg:#0b0711;--panel:rgba(24,14,31,.78);--pink:#ff69c9;--pink2:#ff9bdd;
-  --purple:#a56bff;--text:#fff8ff;--muted:#b6a5bf;--line:rgba(255,151,225,.2);
+  --bg:#090a10;--panel:rgba(22,20,29,.88);--pink:#d58bb8;--pink2:#edb4d4;
+  --purple:#9276bd;--text:#f7f3f8;--muted:#aaa2b2;--line:rgba(213,139,184,.22);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{
   min-height:100vh;overflow-x:hidden;position:relative;isolation:isolate;
   display:grid;place-items:center;padding:34px 16px;color:var(--text);
-  background:radial-gradient(ellipse at 50% 0%,#32133b 0%,#160d20 38%,var(--bg) 76%);
+  background:radial-gradient(ellipse at 50% 0%,#29202d 0%,#15131b 42%,var(--bg) 78%);
   font-family:Inter,"Segoe UI",system-ui,sans-serif;
 }
 #particles{position:fixed;inset:0;width:100%;height:100%;z-index:-2;pointer-events:none}
 .ambient{position:fixed;z-index:-1;width:340px;height:340px;border-radius:50%;filter:blur(100px);opacity:.22;pointer-events:none}
-.ambient.a{background:#ff45ba;top:-130px;left:-120px}
-.ambient.b{background:#8d4cff;right:-150px;bottom:-140px}
+.ambient.a{background:#b66b9d;top:-130px;left:-120px}
+.ambient.b{background:#69578d;right:-150px;bottom:-140px}
 .wrap{width:min(100%,460px);text-align:center;position:relative}
 .brand{margin:0 auto 25px}
 .eyebrow{font-size:10px;letter-spacing:4px;color:#d6b4df;font-weight:800;margin-bottom:8px}
 .logo{
   display:inline-block;font-size:clamp(39px,10vw,58px);font-weight:1000;
   letter-spacing:1px;line-height:1.08;text-transform:uppercase;
-  background:linear-gradient(110deg,#fff 4%,#ffb7e7 18%,#ff5ac5 35%,#fff 48%,#bd8aff 63%,#ff83d4 78%,#fff 94%);
+  background:linear-gradient(110deg,#fff 4%,#e7bfd8 20%,#bd78a8 36%,#fff 49%,#a997c8 65%,#d9a4c5 80%,#fff 94%);
   background-size:250% auto;background-clip:text;-webkit-background-clip:text;color:transparent;
-  filter:drop-shadow(0 0 12px #ff65ca80);
+  filter:drop-shadow(0 0 10px #bd78a855);
   animation:shine 4s linear infinite,hover 4s ease-in-out infinite;
 }
 @keyframes shine{to{background-position:250% center}}
@@ -43,19 +43,19 @@ body{
   background:linear-gradient(120deg,#ff61c51c,#a56bff20);
   box-shadow:0 0 24px #ff55c51c,inset 0 0 15px #ffb4e50a;transition:.25s;
 }
-.top-link:hover{transform:translateY(-3px);box-shadow:0 0 28px #ff61c55c;border-color:#ff9bdd}
+.top-link:hover{transform:translateY(-3px);box-shadow:0 0 28px #ff61c55c;border-color:#e3b4d0}
 .card{
   position:relative;overflow:hidden;text-align:center;padding:31px 25px 25px;
   border:1px solid var(--line);border-radius:29px;
-  background:linear-gradient(145deg,rgba(37,21,47,.92),rgba(14,9,21,.94));
-  box-shadow:0 25px 80px #0008,0 0 38px #e65db51b,inset 0 1px #ffffff12;
+  background:linear-gradient(145deg,rgba(38,32,44,.96),rgba(15,14,21,.97));
+  box-shadow:0 25px 80px #0009,0 0 32px #bd78a814,inset 0 1px #ffffff12;
   backdrop-filter:blur(18px);
 }
 .card:before{content:"";position:absolute;inset:0 15% auto;height:1px;background:linear-gradient(90deg,transparent,#ff9bdd,transparent)}
 .card-head{display:flex;justify-content:center;align-items:center;gap:10px;font-size:20px;font-weight:900;letter-spacing:1.2px}
 .key-icon{font-size:23px;filter:drop-shadow(0 0 8px #ff7acb)}
 .hint{margin:9px 0 27px;color:var(--muted);font-size:13px}
-.hint strong{color:#ff9bdd}
+.hint strong{color:#e3b4d0}
 .range-wrap{padding:0 4px;margin:0 0 29px}
 .range{width:100%;height:7px;border-radius:20px;appearance:none;background:linear-gradient(90deg,#ff6acb,#a56bff);outline:none;cursor:pointer}
 .range::-webkit-slider-thumb{appearance:none;width:22px;height:22px;border-radius:50%;background:#fff;border:5px solid #ff71cb;box-shadow:0 0 0 4px #ff71cb30,0 0 20px #ff71cb;transition:.15s}
@@ -67,18 +67,18 @@ body{
   text-transform:uppercase;cursor:pointer;transition:transform .2s,box-shadow .2s,background .2s;
 }
 .primary{
-  border:0;color:#fff;background:linear-gradient(105deg,#ff56bd,#bf6bff 55%,#ff70c9);
-  background-size:180% auto;box-shadow:0 9px 28px #e64bbd42,inset 0 1px #ffffff55;
+  border:0;color:#fff;background:linear-gradient(105deg,#b76f9c,#826aa8 55%,#c58caf);
+  background-size:180% auto;box-shadow:0 9px 28px #9b648b38,inset 0 1px #ffffff55;
   animation:buttonGlow 3s ease-in-out infinite;
 }
-@keyframes buttonGlow{0%,100%{box-shadow:0 8px 25px #e64bbd35}50%{box-shadow:0 8px 35px #e64bbd75,0 0 22px #a56bff55}}
+@keyframes buttonGlow{0%,100%{box-shadow:0 8px 25px #9b648b30}50%{box-shadow:0 8px 30px #9b648b60,0 0 18px #826aa844}}
 .primary:hover,.download:hover{transform:translateY(-3px)}
 .download{
   margin-top:13px;border:1px solid #d68bff80;color:#f2d9ff;
   background:linear-gradient(120deg,#a56bff16,#ff6acb13);
   box-shadow:inset 0 0 18px #b66bff0b;
 }
-.download:hover{border-color:#ff9bdd;background:#d36bff20;box-shadow:0 0 25px #b66bff35}
+.download:hover{border-color:#e3b4d0;background:#d36bff20;box-shadow:0 0 25px #b66bff35}
 .download.disabled{opacity:.55;cursor:not-allowed;pointer-events:none}
 .note{font-size:10px;color:#8f8198;margin-top:11px;line-height:1.5}
 .result{display:none;margin-top:20px;padding:17px;border-radius:17px;border:1px solid #ff9bdd55;background:#ff8bdc0c;text-align:left}
@@ -86,7 +86,7 @@ body{
 .result h3{font-size:13px;color:#ffb7e7;margin-bottom:7px}
 .result p{font-size:12px;color:#cbbad1;line-height:1.6}
 .key-value{font-size:27px;font-weight:900;letter-spacing:3px;color:#fff;margin:12px 0;text-align:center;text-shadow:0 0 16px #ff69c9}
-.copy-key{display:block;margin:0 auto 13px;padding:10px 22px;border:0;border-radius:9px;background:#ff83d4;color:#240b22;font-size:11px;font-weight:900;letter-spacing:1px;cursor:pointer}
+.copy-key{display:block;margin:0 auto 13px;padding:10px 22px;border:0;border-radius:9px;background:#d99abd;color:#241923;font-size:11px;font-weight:900;letter-spacing:1px;cursor:pointer}
 .result .download{margin-top:15px}
 @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 .footer{font-size:10px;color:#776881;margin-top:20px;letter-spacing:1px}
@@ -110,15 +110,24 @@ body{
 .task-copy{flex:1;min-width:0}
 .task-copy b{display:block;font-size:12px}
 .task-copy small{display:block;color:#9e8ca8;font-size:10px;margin-top:4px}
-.task a{color:#ff9bdd;text-decoration:none;font-size:10px;font-weight:800;white-space:nowrap}
+.task a{color:#e3b4d0;text-decoration:none;font-size:10px;font-weight:800;white-space:nowrap}
 .task-state{color:#ff6464;font-size:15px;filter:drop-shadow(0 0 5px currentColor)}
 .task-state.done{color:#4be39a;filter:drop-shadow(0 0 7px #4be39a)}
 .modal-actions{display:flex;gap:10px;margin-top:18px}
 .modal-actions button{flex:1;min-height:45px;border-radius:12px;font-weight:800;cursor:pointer}
 .cancel{border:1px solid #ffffff25;background:transparent;color:#cbbad1}
-.continue{border:0;background:linear-gradient(100deg,#ff58bd,#a56bff);color:white}
+.continue{border:0;background:linear-gradient(100deg,#b8759f,#8873ae);color:white}
 .continue:disabled{opacity:.4;cursor:not-allowed}
-.modal-status{text-align:center;color:#b7a4c0;font-size:10px;margin-top:12px;min-height:15px}
+.modal-status{text-align:center;color:#b7a4c0;font-size:11px;margin-top:12px;min-height:18px}
+.key-value{font-size:27px;font-weight:900;letter-spacing:3px;color:#fff;margin:12px 0;text-align:center;text-shadow:0 0 16px #bd78a8}
+.copy-key{display:block;margin:0 auto 13px;padding:10px 22px;border:0;border-radius:9px;background:#d99abd;color:#241923;font-size:11px;font-weight:900;letter-spacing:1px;cursor:pointer}
+.result .download{margin-top:15px}
+.wait-panel{display:none;text-align:center;margin-top:20px;padding:20px 14px;border:1px solid #d99abd55;border-radius:17px;background:#d99abd0c}
+.wait-panel.show{display:block;animation:rise .3s ease both}
+.wait-ring{width:58px;height:58px;margin:0 auto 12px;border-radius:50%;display:grid;place-items:center;border:3px solid #ffffff1c;border-top-color:#d99abd;border-right-color:#9276bd;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.wait-title{font-size:13px;font-weight:900;letter-spacing:1px;color:#edc5dc}
+.wait-count{font-size:25px;font-weight:900;margin-top:7px;color:#fff;font-variant-numeric:tabular-nums}
 @media(max-width:390px){.card{padding:27px 18px 21px}.logo{font-size:39px}.top-link{margin:18px 0 21px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
 </style>
@@ -142,16 +151,23 @@ body{
       <div class="range-labels"><span>3 DAYS</span><span>7 DAYS</span><span>15 DAYS</span><span>30 DAYS</span></div>
     </div>
     <button class="primary" id="generateBtn">✦ &nbsp; CONTINUE</button>
-    <div class="result" id="resultBox" role="status" aria-live="polite">
+    <div class="wait-panel" id="waitPanel" aria-live="polite">
+    <div class="wait-ring"></div>
+    <div class="wait-title">GENERATING YOUR KEY</div>
+    <p class="note" id="waitText">Preparing your selected plan</p>
+    <div class="wait-count" id="waitCount">20</div>
+    <p class="note">Please wait while the process completes</p>
+  </div>
+  <div class="result" id="resultBox" role="status" aria-live="polite">
       <h3>✓ KEY GENERATED</h3>
       <div class="key-value" id="keyValue">----------</div>
       <button class="copy-key" id="copyKeyBtn" type="button">COPY KEY</button>
       <p id="resultText">Selected plan: 7 DAYS</p>
-      <a class="download disabled" id="downloadBtn" href="#" aria-disabled="true">⇩ &nbsp; APK LINK COMING SOON</a>
-      <p class="note">APK download link will be added here.</p>
+      <a class="download" id="downloadBtn" href="https://earnlinks.in/Drip-client-Apk" target="_blank" rel="noopener noreferrer">⇩ &nbsp; DOWNLOAD DRIP CLIENT APK</a>
+      <p class="note">Your access key is ready. Download the app to continue.</p>
     </div>
   </section>
-  <p class="footer">SECURE FLOW · RESPONSIVE DESIGN · BUILT FOR DRIP CLIENT</p>
+  <p class="footer">DRIP CLIENT · PREMIUM ACCESS · GW PATHSHALA</p>
 </main>
 
 <div class="overlay" id="taskPopup" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
@@ -181,7 +197,7 @@ body{
       <button class="cancel" id="cancelBtn">CANCEL</button>
       <button class="continue" id="continueBtn" disabled>CONTINUE</button>
     </div>
-    <p class="modal-status" id="modalStatus">0 / 3 tasks checked</p>
+    <p class="modal-status" id="modalStatus">0 / 3 tasks completed</p>
   </div>
 </div>
 
@@ -201,6 +217,7 @@ const modalStatus=document.getElementById("modalStatus");
 const resultBox=document.getElementById("resultBox");
 const resultText=document.getElementById("resultText");
 const taskDone={yt:false,tg:false,video:false};
+let countdownTimer=null;
 
 slider.addEventListener("input",()=>{daysDisplay.textContent=planNames[slider.value]});
 
@@ -211,6 +228,7 @@ document.getElementById("generateBtn").addEventListener("click",()=>{
     dot.classList.remove("done");
     dot.setAttribute("aria-label","Pending");
   });
+  clearInterval(countdownTimer);
   updateTasks();
   resultBox.classList.remove("show");
   popup.classList.add("open");
@@ -222,8 +240,7 @@ popup.addEventListener("click",e=>{if(e.target===popup)popup.classList.remove("o
 document.querySelectorAll(".task a").forEach((link,index)=>{
   const taskKey=["yt","tg","video"][index];
   link.addEventListener("click",()=>{
-    // This reproduces the original demo behavior; opening a URL cannot
-    // independently prove a real subscription or completed view.
+    // Link opening is a client-side task marker, not proof of a real subscription/view.
     setTimeout(()=>{
       taskDone[taskKey]=true;
       const dot=document.getElementById("state-"+taskKey);
@@ -242,11 +259,36 @@ function updateTasks(){
 continueBtn.addEventListener("click",()=>{
   if(!Object.values(taskDone).every(Boolean))return;
   popup.classList.remove("open");
+  beginKeyWait();
+});
+
+function beginKeyWait(){
+  let remaining=20;
+  const wait=document.getElementById("waitPanel");
+  const count=document.getElementById("waitCount");
+  const waitText=document.getElementById("waitText");
+  wait.classList.add("show");
+  resultBox.classList.remove("show");
+  waitText.textContent="Preparing your selected plan";
+  count.textContent=remaining;
+  const tick=()=>{
+    remaining--;
+    count.textContent=remaining;
+    if(remaining<=0){
+      clearInterval(countdownTimer);
+      wait.classList.remove("show");
+      revealKey();
+    }
+  };
+  countdownTimer=setInterval(tick,1000);
+}
+function revealKey(){
   const key=keysPool[Math.floor(Math.random()*keysPool.length)];
   document.getElementById("keyValue").textContent=key;
-  resultText.textContent=`PLAN STATUS: ${planNames[slider.value]} · DEMO KEY GENERATED`;
+  resultText.textContent=`PLAN SELECTED: ${planNames[slider.value]} · ACCESS KEY READY`;
   resultBox.classList.add("show");
-});
+  resultBox.scrollIntoView({behavior:"smooth",block:"center"});
+}
 document.getElementById("copyKeyBtn").addEventListener("click",async()=>{
   const key=document.getElementById("keyValue").textContent;
   try{
@@ -257,28 +299,15 @@ document.getElementById("copyKeyBtn").addEventListener("click",async()=>{
   }
 });
 
-// Add the official APK URL here once it is supplied.
-// The download button is shown only after all three tasks are marked complete.
-const APK_DOWNLOAD_URL="";
-const downloadBtn=document.getElementById("downloadBtn");
-if(APK_DOWNLOAD_URL.trim()){
-  downloadBtn.href=APK_DOWNLOAD_URL;
-  downloadBtn.target="_blank";
-  downloadBtn.rel="noopener noreferrer";
-  downloadBtn.classList.remove("disabled");
-  downloadBtn.removeAttribute("aria-disabled");
-  downloadBtn.textContent="⇩  DOWNLOAD DRIP CLIENT APK";
-}
-
-// Lightweight animated floating particles.
+// Animated floating particles
 const canvas=document.getElementById("particles"),ctx=canvas.getContext("2d");
 let w=0,h=0,dpr=1,particles=[];
 function resize(){
   dpr=Math.min(window.devicePixelRatio||1,2);w=innerWidth;h=innerHeight;
   canvas.width=w*dpr;canvas.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
   particles=Array.from({length:Math.min(65,Math.floor(w/13))},()=>({
-    x:Math.random()*w,y:Math.random()*h,r:Math.random()*1.7+.4,
-    vx:(Math.random()-.5)*.22,vy:Math.random()*.35+.08,a:Math.random()*.45+.12
+    x:Math.random()*w,y:Math.random()*h,r:Math.random()*1.5+.4,
+    vx:(Math.random()-.5)*.2,vy:Math.random()*.3+.08,a:Math.random()*.35+.1
   }));
 }
 function draw(){
@@ -288,7 +317,7 @@ function draw(){
     if(p.y<-5){p.y=h+5;p.x=Math.random()*w}
     if(p.x<-5)p.x=w+5;if(p.x>w+5)p.x=-5;
     ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-    ctx.fillStyle=`rgba(255,145,220,${p.a})`;ctx.shadowBlur=12;ctx.shadowColor="#ff68c8";ctx.fill();
+    ctx.fillStyle=`rgba(211,158,194,${p.a})`;ctx.shadowBlur=10;ctx.shadowColor="#bd78a8";ctx.fill();
   }
   ctx.shadowBlur=0;requestAnimationFrame(draw);
 }
