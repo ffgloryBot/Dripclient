@@ -156,7 +156,7 @@ body{
     <div class="card-head"><span class="key-icon">✧</span> GENERATE ACCESS <span class="key-icon">✧</span></div>
     <p class="hint">Choose your plan · <strong id="daysDisplay">0 DAYS</strong></p>
     <div class="range-wrap">
-      <input class="range" id="planSlider" type="range" min="0" max="30" value="0" step="1" aria-label="Select plan duration">
+      <input class="range" id="planSlider" type="range" min="0" max="4" value="0" step="1" aria-label="Select plan duration">
       <div class="range-labels"><span>0</span><span>3 DAYS</span><span>7 DAYS</span><span>15 DAYS</span><span>30 DAYS</span></div>
     </div>
     <button class="primary" id="generateBtn" disabled>CONTINUE &nbsp; →</button>
@@ -216,7 +216,7 @@ body{
 </div>
 
 <script>
-const planNames={1:"3 DAYS",2:"7 DAYS",3:"15 DAYS",4:"30 DAYS"};
+const planNames={0:"0 DAYS",1:"3 DAYS",2:"7 DAYS",3:"15 DAYS",4:"30 DAYS"};
 const keysPool=[
  "1137324396","2489510374","5931048267","8104729563","3571920486",
  "7204918356","1948263750","6305814972","4729105836","8593021476",
@@ -236,7 +236,8 @@ const resultText=document.getElementById("resultText");
 const taskDone={yt:false,tg:false,video:false};
 let countdownTimer=null;
 
-function selectedDays(){return Number(slider.value)}
+const planDays=[0,3,7,15,30];
+function selectedDays(){return planDays[Number(slider.value)]}
 function planLabel(){return `${selectedDays()} ${selectedDays()===1?"DAY":"DAYS"}`}
 slider.addEventListener("input",()=>{
   daysDisplay.textContent=planLabel();
