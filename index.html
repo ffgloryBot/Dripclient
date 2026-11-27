@@ -1,525 +1,250 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DRIP CLIENT - GW PATHSHALA</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: #06020f;
-            color: #fff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        /* 0101 मैट्रिक्स गिरता हुआ बैकग्राउंड */
-        canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-        }
-
-        .main-container {
-            position: relative;
-            z-index: 1;
-            width: 100%;
-            max-width: 420px;
-            text-align: center;
-        }
-
-        /* इमेज जैसा ग्लोइंग पर्पल टाइटल */
-        .main-title {
-            font-size: 46px;
-            font-weight: bold;
-            color: #d182ff;
-            text-shadow: 0 0 30px rgba(209, 130, 255, 0.8), 0 0 10px rgba(209, 130, 255, 0.4);
-            letter-spacing: 1px;
-            margin-bottom: 2px;
-            text-transform: uppercase;
-        }
-
-        .subtitle {
-            font-size: 13px;
-            color: #8c82a6;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            margin-bottom: 30px;
-            font-weight: 600;
-        }
-
-        /* इमेज की तरह पिल्ड-शेप जॉइन टेलीग्राम बटन */
-        .tg-top-btn {
-            display: inline-block;
-            padding: 11px 40px;
-            border: 2px solid #3d1b66;
-            border-radius: 50px;
-            color: #c97aff;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            background: rgba(15, 8, 32, 0.5);
-            box-shadow: 0 0 20px rgba(201, 122, 255, 0.1);
-            transition: all 0.3s ease;
-            margin-bottom: 45px;
-            backdrop-filter: blur(5px);
-        }
-
-        .tg-top-btn:hover {
-            box-shadow: 0 0 30px rgba(201, 122, 255, 0.5);
-            border-color: #c97aff;
-            transform: translateY(-1px);
-        }
-
-        /* डार्क कार्ड कंटेनर (चारों तरफ पर्पल ग्लो के साथ) */
-        .card-container {
-            background: #05020c;
-            border-radius: 35px;
-            padding: 40px 30px;
-            box-shadow: 0 0 45px rgba(190, 110, 255, 0.2);
-            border: 1px solid rgba(190, 110, 255, 0.08);
-            position: relative;
-        }
-
-        /* हेडर और चाबी वाला इमोजी */
-        .plan-header {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            font-size: 22px;
-            font-weight: bold;
-            color: #ffffff;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            margin-bottom: 8px;
-        }
-
-        .duration-display {
-            font-size: 15px;
-            color: #8a82a1;
-            font-weight: 500;
-            margin-bottom: 35px;
-        }
-
-        /* इमेज जैसा ब्लू '7 days' टेक्स्ट */
-        .duration-display span {
-            color: #2b93ff;
-            font-weight: bold;
-            text-shadow: 0 0 10px rgba(43, 147, 255, 0.4);
-        }
-
-        .slider-container {
-            width: 100%;
-            padding: 0 5px;
-            margin-bottom: 40px;
-        }
-
-        /* इमेज की तरह सफ़ेद स्लाइडर ट्रैक */
-        .slider {
-            width: 100%;
-            -webkit-appearance: none;
-            height: 6px;
-            border-radius: 10px;
-            background: #ffffff;
-            outline: none;
-            position: relative;
-        }
-
-        /* इमेज जैसा नियॉन ब्लू गोल थम्ब/पॉइंटर */
-        .slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            background: #2b93ff;
-            cursor: pointer;
-            box-shadow: 0 0 15px #2b93ff, 0 0 6px rgba(43, 147, 255, 0.8);
-            transition: transform 0.1s ease;
-        }
-
-        .slider::-webkit-slider-thumb:hover {
-            transform: scale(1.2);
-        }
-
-        /* इमेज की तरह चमकीला पर्पल जनरेट बटन */
-        .generate-btn {
-            width: 100%;
-            padding: 18px;
-            background: #be6eff;
-            border: none;
-            border-radius: 50px;
-            color: #ffffff;
-            font-size: 16px;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            cursor: pointer;
-            box-shadow: 0 0 35px rgba(190, 110, 255, 0.7);
-            transition: all 0.3s ease;
-            margin-bottom: 18px; /* Download button ke liye gap */
-        }
-
-        .generate-btn:hover {
-            box-shadow: 0 0 45px rgba(190, 110, 255, 0.9);
-            transform: scale(1.01);
-        }
-
-        /* ———————————————————————————————————————————————
-           DOWNLOAD BUTTON STYLE (MATCHED TO YOUR THEME)
-           ——————————————————————————————————————————————— */
-        .download-btn {
-            display: block;
-            width: 100%;
-            padding: 16px;
-            background: transparent;
-            border: 2px solid #be6eff;
-            border-radius: 50px;
-            color: #be6eff;
-            font-size: 15px;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            text-decoration: none;
-            cursor: pointer;
-            box-shadow: 0 0 20px rgba(190, 110, 255, 0.2);
-            transition: all 0.3s ease;
-        }
-
-        .download-btn:hover {
-            background: rgba(190, 110, 255, 0.1);
-            box-shadow: 0 0 35px rgba(190, 110, 255, 0.6);
-            color: #ffffff;
-            border-color: #ffffff;
-        }
-
-        /* वेरीफाइड की बॉक्स (सफ़ेद/स्यान बॉर्डर इफ़ेक्ट) */
-        .verified-card {
-            border: 2px solid #00f2fe;
-            border-radius: 20px;
-            padding: 22px 16px;
-            background: #070413;
-            box-shadow: 0 0 25px rgba(0, 242, 254, 0.25);
-            display: none;
-            margin-top: 30px;
-        }
-
-        .verified-title {
-            color: #00f2fe;
-            font-size: 13px;
-            font-weight: bold;
-            letter-spacing: 1px;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-        }
-
-        .key-inner-wrapper {
-            border: 1px solid #231f38;
-            background: #0d0a1f;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 15px;
-        }
-
-        .key-number {
-            font-size: 28px;
-            font-weight: bold;
-            letter-spacing: 2px;
-            color: #fff;
-            margin-bottom: 15px;
-        }
-
-        .copy-action-btn {
-            background: #00f2fe;
-            color: #000;
-            border: none;
-            padding: 10px 24px;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: bold;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .status-bar {
-            font-size: 11px;
-            color: #726b8e;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .status-bar span {
-            color: #00f2fe;
-            font-weight: bold;
-        }
-
-        /* टास्क पॉप-अप विंडो */
-        .popup-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(3, 1, 8, 0.94);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 100;
-            opacity: 0;
-            pointer-events: none;
-            transition: all 0.3s ease;
-        }
-
-        .popup-overlay.open {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .popup-box {
-            background: #090516;
-            border: 2px solid #be6eff;
-            border-radius: 24px;
-            padding: 25px;
-            width: 90%;
-            max-width: 380px;
-            text-align: center;
-            box-shadow: 0 0 35px rgba(190, 110, 255, 0.3);
-            transform: scale(0.85);
-            transition: all 0.3s ease;
-        }
-
-        .popup-overlay.open .popup-box {
-            transform: scale(1);
-        }
-
-        .popup-header {
-            font-size: 18px;
-            font-weight: bold;
-            color: #be6eff;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .task-container {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-
-        .task-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 14px 18px;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(190, 110, 255, 0.1);
-            border-radius: 12px;
-            color: #fff;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        .status-indicator {
-            width: 10px;
-            height: 10px;
-            background-color: #ff4d4d;
-            border-radius: 50%;
-        }
-
-        .status-indicator.done {
-            background-color: #2ecc71;
-            box-shadow: 0 0 8px #2ecc71;
-        }
-
-        .close-txt {
-            display: inline-block;
-            margin-top: 12px;
-            color: #ff4d4d;
-            font-size: 13px;
-            cursor: pointer;
-            text-decoration: underline;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#100817">
+<title>DRIP CLIENT — GW PATHSHALA</title>
+<style>
+:root{
+  --bg:#0b0711;--panel:rgba(24,14,31,.78);--pink:#ff69c9;--pink2:#ff9bdd;
+  --purple:#a56bff;--text:#fff8ff;--muted:#b6a5bf;--line:rgba(255,151,225,.2);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  min-height:100vh;overflow-x:hidden;position:relative;isolation:isolate;
+  display:grid;place-items:center;padding:34px 16px;color:var(--text);
+  background:radial-gradient(ellipse at 50% 0%,#32133b 0%,#160d20 38%,var(--bg) 76%);
+  font-family:Inter,"Segoe UI",system-ui,sans-serif;
+}
+#particles{position:fixed;inset:0;width:100%;height:100%;z-index:-2;pointer-events:none}
+.ambient{position:fixed;z-index:-1;width:340px;height:340px;border-radius:50%;filter:blur(100px);opacity:.22;pointer-events:none}
+.ambient.a{background:#ff45ba;top:-130px;left:-120px}
+.ambient.b{background:#8d4cff;right:-150px;bottom:-140px}
+.wrap{width:min(100%,460px);text-align:center;position:relative}
+.brand{margin:0 auto 25px}
+.eyebrow{font-size:10px;letter-spacing:4px;color:#d6b4df;font-weight:800;margin-bottom:8px}
+.logo{
+  display:inline-block;font-size:clamp(39px,10vw,58px);font-weight:1000;
+  letter-spacing:1px;line-height:1.08;text-transform:uppercase;
+  background:linear-gradient(110deg,#fff 4%,#ffb7e7 18%,#ff5ac5 35%,#fff 48%,#bd8aff 63%,#ff83d4 78%,#fff 94%);
+  background-size:250% auto;background-clip:text;-webkit-background-clip:text;color:transparent;
+  filter:drop-shadow(0 0 12px #ff65ca80);
+  animation:shine 4s linear infinite,hover 4s ease-in-out infinite;
+}
+@keyframes shine{to{background-position:250% center}}
+@keyframes hover{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+.subtitle{margin-top:9px;color:var(--muted);font-size:11px;letter-spacing:2px;font-weight:700}
+.top-link{
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  margin:22px 0 25px;padding:12px 25px;border:1px solid #f47acb88;border-radius:99px;
+  color:#ffd8f2;text-decoration:none;font-size:12px;font-weight:800;letter-spacing:1.4px;
+  background:linear-gradient(120deg,#ff61c51c,#a56bff20);
+  box-shadow:0 0 24px #ff55c51c,inset 0 0 15px #ffb4e50a;transition:.25s;
+}
+.top-link:hover{transform:translateY(-3px);box-shadow:0 0 28px #ff61c55c;border-color:#ff9bdd}
+.card{
+  position:relative;overflow:hidden;text-align:center;padding:31px 25px 25px;
+  border:1px solid var(--line);border-radius:29px;
+  background:linear-gradient(145deg,rgba(37,21,47,.92),rgba(14,9,21,.94));
+  box-shadow:0 25px 80px #0008,0 0 38px #e65db51b,inset 0 1px #ffffff12;
+  backdrop-filter:blur(18px);
+}
+.card:before{content:"";position:absolute;inset:0 15% auto;height:1px;background:linear-gradient(90deg,transparent,#ff9bdd,transparent)}
+.card-head{display:flex;justify-content:center;align-items:center;gap:10px;font-size:20px;font-weight:900;letter-spacing:1.2px}
+.key-icon{font-size:23px;filter:drop-shadow(0 0 8px #ff7acb)}
+.hint{margin:9px 0 27px;color:var(--muted);font-size:13px}
+.hint strong{color:#ff9bdd}
+.range-wrap{padding:0 4px;margin:0 0 29px}
+.range{width:100%;height:7px;border-radius:20px;appearance:none;background:linear-gradient(90deg,#ff6acb,#a56bff);outline:none;cursor:pointer}
+.range::-webkit-slider-thumb{appearance:none;width:22px;height:22px;border-radius:50%;background:#fff;border:5px solid #ff71cb;box-shadow:0 0 0 4px #ff71cb30,0 0 20px #ff71cb;transition:.15s}
+.range::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:#fff;border:5px solid #ff71cb;box-shadow:0 0 15px #ff71cb}
+.range-labels{display:flex;justify-content:space-between;color:#8f7d99;font-size:10px;margin-top:12px}
+.primary,.download{
+  display:flex;width:100%;min-height:53px;align-items:center;justify-content:center;gap:9px;
+  border-radius:15px;font-weight:900;letter-spacing:1.2px;text-decoration:none;
+  text-transform:uppercase;cursor:pointer;transition:transform .2s,box-shadow .2s,background .2s;
+}
+.primary{
+  border:0;color:#fff;background:linear-gradient(105deg,#ff56bd,#bf6bff 55%,#ff70c9);
+  background-size:180% auto;box-shadow:0 9px 28px #e64bbd42,inset 0 1px #ffffff55;
+  animation:buttonGlow 3s ease-in-out infinite;
+}
+@keyframes buttonGlow{0%,100%{box-shadow:0 8px 25px #e64bbd35}50%{box-shadow:0 8px 35px #e64bbd75,0 0 22px #a56bff55}}
+.primary:hover,.download:hover{transform:translateY(-3px)}
+.download{
+  margin-top:13px;border:1px solid #d68bff80;color:#f2d9ff;
+  background:linear-gradient(120deg,#a56bff16,#ff6acb13);
+  box-shadow:inset 0 0 18px #b66bff0b;
+}
+.download:hover{border-color:#ff9bdd;background:#d36bff20;box-shadow:0 0 25px #b66bff35}
+.download.disabled{opacity:.55;cursor:not-allowed;pointer-events:none}
+.note{font-size:10px;color:#8f8198;margin-top:11px;line-height:1.5}
+.result{display:none;margin-top:20px;padding:17px;border-radius:17px;border:1px solid #ff9bdd55;background:#ff8bdc0c;text-align:left}
+.result.show{display:block;animation:rise .35s ease both}
+.result h3{font-size:13px;color:#ffb7e7;margin-bottom:7px}
+.result p{font-size:12px;color:#cbbad1;line-height:1.6}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.footer{font-size:10px;color:#776881;margin-top:20px;letter-spacing:1px}
+.overlay{
+  position:fixed;inset:0;z-index:5;display:grid;place-items:center;padding:18px;
+  background:#08040ddf;backdrop-filter:blur(12px);opacity:0;visibility:hidden;transition:.25s;
+}
+.overlay.open{opacity:1;visibility:visible}
+.modal{
+  width:min(100%,390px);padding:25px;border-radius:25px;text-align:left;
+  background:linear-gradient(145deg,#26152f,#100a18);border:1px solid #ff8bdc70;
+  box-shadow:0 20px 70px #000b,0 0 35px #ff6acb25;transform:translateY(14px) scale(.97);transition:.25s;
+}
+.overlay.open .modal{transform:translateY(0) scale(1)}
+.modal h2{text-align:center;font-size:18px;letter-spacing:1px;margin-bottom:7px}
+.modal-intro{text-align:center;color:var(--muted);font-size:12px;margin-bottom:20px}
+.task{display:flex;align-items:center;gap:12px;padding:14px;margin:10px 0;border-radius:14px;
+  background:#ffffff08;border:1px solid #ffffff12;transition:.2s}
+.task:hover{border-color:#ff8bdc66;transform:translateX(3px)}
+.task-icon{width:36px;height:36px;display:grid;place-items:center;flex:none;border-radius:11px;background:#ff78d21c;font-size:17px}
+.task-copy{flex:1;min-width:0}
+.task-copy b{display:block;font-size:12px}
+.task-copy small{display:block;color:#9e8ca8;font-size:10px;margin-top:4px}
+.task a{color:#ff9bdd;text-decoration:none;font-size:10px;font-weight:800;white-space:nowrap}
+.task input{accent-color:#ff68c8;width:17px;height:17px;cursor:pointer}
+.modal-actions{display:flex;gap:10px;margin-top:18px}
+.modal-actions button{flex:1;min-height:45px;border-radius:12px;font-weight:800;cursor:pointer}
+.cancel{border:1px solid #ffffff25;background:transparent;color:#cbbad1}
+.continue{border:0;background:linear-gradient(100deg,#ff58bd,#a56bff);color:white}
+.continue:disabled{opacity:.4;cursor:not-allowed}
+.modal-status{text-align:center;color:#b7a4c0;font-size:10px;margin-top:12px;min-height:15px}
+@media(max-width:390px){.card{padding:27px 18px 21px}.logo{font-size:39px}.top-link{margin:18px 0 21px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
+</style>
 </head>
 <body>
+<canvas id="particles" aria-hidden="true"></canvas><div class="ambient a"></div><div class="ambient b"></div>
+<main class="wrap">
+  <header class="brand">
+    <div class="eyebrow">WELCOME TO</div>
+    <h1 class="logo">DRIP CLIENT</h1>
+    <p class="subtitle">PREMIUM EXPERIENCE • GW PATHSHALA</p>
+  </header>
 
-<canvas id="matrixCanvas"></canvas>
+  <a class="top-link" href="https://t.me/GwPathshala" target="_blank" rel="noopener noreferrer">✦ &nbsp; JOIN TELEGRAM</a>
 
-<div class="main-container">
-    <div class="main-title">DRIP CLIENT</div>
-    <div class="subtitle">CRACKED VERSION • WELCOME TO GW PATHSHALA</div>
-
-    <a href="https://t.me/GwPathshala" target="_blank" class="tg-top-btn">Join Telegram</a>
-
-    <div class="card-container">
-        <div class="plan-header">🔑 GENERATE KEY</div>
-        <div class="duration-display">Duration: <span id="daysDisplay">7 days</span></div>
-        
-        <div class="slider-container">
-            <input type="range" min="1" max="4" value="2" class="slider" id="planSlider" oninput="slidePlan()">
-        </div>
-
-        <!-- Purana Generate Button -->
-        <button class="generate-btn" onclick="triggerTasks()">Generate Key</button>
-
-        <!-- Naya Added Download Drip Client APK Button -->
-        <a href="https://earnlinks.in/Drip-client-Apk" target="_blank" class="download-btn">📥 Download Drip Client APK</a>
-
-        <div class="verified-card" id="verifiedBox">
-            <div class="verified-title">🔥 GW PATHSHALA OFFICIALLY VERIFIED ✓</div>
-            <div class="key-inner-wrapper">
-                <div class="key-number" id="keyNum">----------</div>
-                <button class="copy-action-btn" onclick="copyKeyText()">📄 COPY VERIFIED KEY</button>
-            </div>
-            <div class="status-bar">PLAN STATUS: <span id="statusText">7 DAYS</span> PREMIUM ACCESS ACTIVE</div>
-        </div>
+  <section class="card">
+    <div class="card-head"><span class="key-icon">✧</span> GENERATE ACCESS <span class="key-icon">✧</span></div>
+    <p class="hint">Choose your plan · <strong id="daysDisplay">7 DAYS</strong></p>
+    <div class="range-wrap">
+      <input class="range" id="planSlider" type="range" min="1" max="4" value="2" step="1" aria-label="Select plan duration">
+      <div class="range-labels"><span>3 DAYS</span><span>7 DAYS</span><span>15 DAYS</span><span>30 DAYS</span></div>
     </div>
-</div>
+    <button class="primary" id="generateBtn">✦ &nbsp; CONTINUE</button>
+    <a class="download disabled" id="downloadBtn" href="#" aria-disabled="true">⇩ &nbsp; APK LINK COMING SOON</a>
+    <p class="note">Download link will be activated after the official APK URL is added.</p>
 
-<div class="popup-overlay" id="taskPopup">
-    <div class="popup-box">
-        <div class="popup-header">Complete All Tasks</div>
-        
-        <div class="task-container">
-            <!-- Task 1: Untouched -->
-            <a href="https://youtu.be/xbDTQqK13TQ?si=WtAFwqsF2gDwBSY6" target="_blank" class="task-row" onclick="completeTaskStep('yt')">
-                <span>🔴 YouTube Channel Subscribe</span>
-                <span class="status-indicator" id="yt-indicator"></span>
-            </a>
-            <!-- Task 2: Untouched -->
-            <a href="https://t.me/GwPathshala" target="_blank" class="task-row" onclick="completeTaskStep('tg')">
-                <span>🔵 Join Telegram Channel</span>
-                <span class="status-indicator" id="tg-indicator"></span>
-            </a>
-            <!-- Task 3: Name and YouTube Link Updated Perfectly -->
-            <a href="https://youtu.be/NnCV9VJoe_s?si=O3fQmOwvFgPncBoR" target="_blank" class="task-row" onclick="completeTaskStep('wa')">
-                <span>🟢 Watch Full & Share Video</span>
-                <span class="status-indicator" id="wa-indicator"></span>
-            </a>
-        </div>
-
-        <span class="close-txt" onclick="closeTaskWindow()">Cancel</span>
+    <div class="result" id="resultBox" role="status" aria-live="polite">
+      <h3>REQUEST READY</h3>
+      <p id="resultText">Your selected plan is ready for server-side verification. No access key has been issued yet.</p>
     </div>
+  </section>
+  <p class="footer">SECURE FLOW · RESPONSIVE DESIGN · BUILT FOR DRIP CLIENT</p>
+</main>
+
+<div class="overlay" id="taskPopup" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal">
+    <h2 id="modalTitle">COMPLETE THE TASKS</h2>
+    <p class="modal-intro">Open each link, complete the task, then tick the box.</p>
+
+    <div class="task">
+      <div class="task-icon">▶</div>
+      <div class="task-copy"><b>YouTube Channel</b><small>Visit the channel</small></div>
+      <a href="https://youtu.be/xbDTQqK13TQ?si=WtAFwqsF2gDwBSY6" target="_blank" rel="noopener noreferrer">OPEN ↗</a>
+      <input type="checkbox" class="task-check" aria-label="Mark YouTube task complete">
+    </div>
+    <div class="task">
+      <div class="task-icon">✈</div>
+      <div class="task-copy"><b>Telegram Channel</b><small>Join the community</small></div>
+      <a href="https://t.me/GwPathshala" target="_blank" rel="noopener noreferrer">OPEN ↗</a>
+      <input type="checkbox" class="task-check" aria-label="Mark Telegram task complete">
+    </div>
+    <div class="task">
+      <div class="task-icon">◉</div>
+      <div class="task-copy"><b>Watch & Share Video</b><small>Open the featured video</small></div>
+      <a href="https://youtu.be/NnCV9VJoe_s?si=O3fQmOwvFgPncBoR" target="_blank" rel="noopener noreferrer">OPEN ↗</a>
+      <input type="checkbox" class="task-check" aria-label="Mark video task complete">
+    </div>
+    <div class="modal-actions">
+      <button class="cancel" id="cancelBtn">CANCEL</button>
+      <button class="continue" id="continueBtn" disabled>CONTINUE</button>
+    </div>
+    <p class="modal-status" id="modalStatus">0 / 3 tasks checked</p>
+  </div>
 </div>
 
 <script>
-    let chosenPlan = "7 days";
-    let taskStatus = { yt: false, tg: false, wa: false };
+const planNames={1:"3 DAYS",2:"7 DAYS",3:"15 DAYS",4:"30 DAYS"};
+const slider=document.getElementById("planSlider");
+const daysDisplay=document.getElementById("daysDisplay");
+const popup=document.getElementById("taskPopup");
+const checks=[...document.querySelectorAll(".task-check")];
+const continueBtn=document.getElementById("continueBtn");
+const modalStatus=document.getElementById("modalStatus");
+const resultBox=document.getElementById("resultBox");
+const resultText=document.getElementById("resultText");
 
-    const keysPool = [
-        "1137324396", "2489510374", "5931048267", "8104729563", "3571920486",
-        "7204918356", "1948263750", "6305814972", "4729105836", "8593021476",
-        "3104859267", "9264817350", "5481923076", "2074819365", "6830154927",
-        "1493027586", "7392048156", "5820491367", "4910382756", "8204917364"
-    ];
+slider.addEventListener("input",()=>{daysDisplay.textContent=planNames[slider.value]});
+document.getElementById("generateBtn").addEventListener("click",()=>{
+  checks.forEach(c=>c.checked=false);updateTasks();
+  resultBox.classList.remove("show");popup.classList.add("open");
+});
+document.getElementById("cancelBtn").addEventListener("click",()=>popup.classList.remove("open"));
+popup.addEventListener("click",e=>{if(e.target===popup)popup.classList.remove("open")});
+checks.forEach(c=>c.addEventListener("change",updateTasks));
+function updateTasks(){
+  const done=checks.filter(c=>c.checked).length;
+  modalStatus.textContent=`${done} / 3 tasks checked`;
+  continueBtn.disabled=done!==3;
+}
+continueBtn.addEventListener("click",()=>{
+  popup.classList.remove("open");
+  resultText.textContent=`Selected plan: ${planNames[slider.value]}. Tasks have been marked complete. Connect a trusted server-side verification endpoint to validate tasks and issue a real access key.`;
+  resultBox.classList.add("show");
+});
 
-    // 01 मैट्रिक्स बैकग्राउंड लॉजिक (पर्पल ग्लो थीम)
-    const canvas = document.getElementById('matrixCanvas');
-    const ctx = canvas.getContext('2d');
+// Add the official APK URL here when it is ready.
+const APK_DOWNLOAD_URL="";
+const downloadBtn=document.getElementById("downloadBtn");
+if(APK_DOWNLOAD_URL.trim()){
+  downloadBtn.href=APK_DOWNLOAD_URL;
+  downloadBtn.target="_blank";
+  downloadBtn.rel="noopener noreferrer";
+  downloadBtn.classList.remove("disabled");
+  downloadBtn.removeAttribute("aria-disabled");
+  downloadBtn.textContent="⇩  DOWNLOAD DRIP CLIENT APK";
+}
 
-    function adjustCanvasSize() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-    }
-    adjustCanvasSize();
-    window.addEventListener('resize', adjustCanvasSize);
-
-    const charList = "01";
-    const sizeOfFont = 14;
-    const totalCols = canvas.width / sizeOfFont;
-    const drops = Array(Math.floor(totalCols)).fill(1);
-
-    function animateMatrix() {
-        ctx.fillStyle = 'rgba(6, 2, 15, 0.12)'; 
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        ctx.fillStyle = 'rgba(190, 110, 255, 0.12)'; 
-        ctx.font = sizeOfFont + 'px monospace';
-
-        for (let i = 0; i < drops.length; i++) {
-            const char = charList.charAt(Math.floor(Math.random() * charList.length));
-            ctx.fillText(char, i * sizeOfFont, drops[i] * sizeOfFont);
-
-            if (drops[i] * sizeOfFont > canvas.height && Math.random() > 0.975) {
-                drops[i] = 0;
-            }
-            drops[i]++;
-        }
-    }
-    setInterval(animateMatrix, 33);
-
-    // स्लाइडर हिलाने पर दिन बदलने का लॉजिक
-    function slidePlan() {
-        let val = document.getElementById('planSlider').value;
-        if(val == 1) chosenPlan = "3 days";
-        if(val == 2) chosenPlan = "7 days";
-        if(val == 3) chosenPlan = "15 days";
-        if(val == 4) chosenPlan = "30 days";
-
-        document.getElementById('daysDisplay').innerHTML = chosenPlan;
-    }
-
-    function triggerTasks() {
-        taskStatus = { yt: false, tg: false, wa: false };
-        document.getElementById('yt-indicator').classList.remove('done');
-        document.getElementById('tg-indicator').classList.remove('done');
-        document.getElementById('wa-indicator').classList.remove('done');
-        document.getElementById('verifiedBox').style.display = 'none';
-
-        document.getElementById('taskPopup').classList.add('open');
-    }
-
-    function closeTaskWindow() {
-        document.getElementById('taskPopup').classList.remove('open');
-    }
-
-    function completeTaskStep(type) {
-        setTimeout(() => {
-            taskStatus[type] = true;
-            document.getElementById(`${type}-indicator`).classList.add('done');
-            verifyAllSteps();
-        }, 1200);
-    }
-
-    function verifyAllSteps() {
-        if (taskStatus.yt && taskStatus.tg && taskStatus.wa) {
-            setTimeout(() => {
-                closeTaskWindow();
-                let randomIdx = Math.floor(Math.random() * keysPool.length);
-                let finalKey = keysPool[randomIdx];
-
-                document.getElementById('keyNum').innerText = finalKey;
-                document.getElementById('statusText').innerText = chosenPlan.toUpperCase();
-                document.getElementById('verifiedBox').style.display = 'block';
-            }, 400);
-        }
-    }
-
-    function copyKeyText() {
-        let text = document.getElementById('keyNum').innerText;
-        navigator.clipboard.writeText(text).then(() => {
-            alert("✅ Key Successfully Copied: " + text);
-        });
-    }
+// Lightweight animated floating particles.
+const canvas=document.getElementById("particles"),ctx=canvas.getContext("2d");
+let w=0,h=0,dpr=1,particles=[];
+function resize(){
+  dpr=Math.min(window.devicePixelRatio||1,2);w=innerWidth;h=innerHeight;
+  canvas.width=w*dpr;canvas.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
+  particles=Array.from({length:Math.min(65,Math.floor(w/13))},()=>({
+    x:Math.random()*w,y:Math.random()*h,r:Math.random()*1.7+.4,
+    vx:(Math.random()-.5)*.22,vy:Math.random()*.35+.08,a:Math.random()*.45+.12
+  }));
+}
+function draw(){
+  ctx.clearRect(0,0,w,h);
+  for(const p of particles){
+    p.x+=p.vx;p.y-=p.vy;
+    if(p.y<-5){p.y=h+5;p.x=Math.random()*w}
+    if(p.x<-5)p.x=w+5;if(p.x>w+5)p.x=-5;
+    ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fillStyle=`rgba(255,145,220,${p.a})`;ctx.shadowBlur=12;ctx.shadowColor="#ff68c8";ctx.fill();
+  }
+  ctx.shadowBlur=0;requestAnimationFrame(draw);
+}
+resize();addEventListener("resize",resize);draw();
 </script>
-
 </body>
 </html>
